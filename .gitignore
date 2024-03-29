@@ -1,1 +1,4 @@
 /venv
+/intermediate
+*.csv
+__pycache__
