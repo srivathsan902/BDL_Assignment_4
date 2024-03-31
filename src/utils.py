@@ -9,7 +9,7 @@ import json
 
 
 import yaml
-def load_params():
-    with open('params.yaml', 'r') as file:
+def load_params(params_yaml_path):
+    with open(params_yaml_path, 'r') as file:
         params = yaml.safe_load(file)
     return params
