@@ -13,15 +13,15 @@ download:
 process:
   INPUT_PATH: "downloaded"
   OUTPUT_PATH: "processed"
-  OUTPUT_FILE_NAME: "actual_averages.json"
+  OUTPUT_FILE_NAME: "processed_averages.json"
 
 prepare:
   INPUT_PATH: "downloaded"
   OUTPUT_PATH: "prepared"
-  OUTPUT_FILE_NAME: "processed_averages.json"
+  OUTPUT_FILE_NAME: "actual_averages.json"
 
 evaluate:
   INPUT_PATHS: ["processed", "prepared"]
-  INPUT_FILE_NAMES: ["actual_averages.json", "processed_averages.json"]
   OUTPUT_PATH: "eval"
+  INPUT_FILE_NAMES: ["processed_averages.json","actual_averages.json"]
 

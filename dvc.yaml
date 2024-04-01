@@ -15,6 +15,7 @@ stages:
   process:
     cmd: python src/process.py
     deps:
+    - downloaded
     - src/process.py
     params:
     - base.EXPECTED_COLUMNS
@@ -27,6 +28,7 @@ stages:
   prepare:
     cmd: python src/prepare.py
     deps:
+    - downloaded
     - src/prepare.py
     params:
     - base.GT_COLUMNS
@@ -38,10 +40,13 @@ stages:
   evaluate:
     cmd: python src/evaluate.py
     deps:
+    - prepared
+    - processed
     - src/evaluate.py
     params:
     - base.MAPPING
     - evaluate.INPUT_FILE_NAMES
     - evaluate.INPUT_PATHS
-    outs:
-    - eval
+    metrics:
+    - eval/live/metrics.json:
+        cache: false

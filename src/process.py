@@ -33,7 +33,7 @@ def compute_monthly_averages(params_yaml_path):
                 full_date_range = pd.date_range(start=f'{start_year}-01-01', end=f'{start_year}-12-31', freq='ME')
 
                 # Put average of 0 for the month, if the month is not encountered at all in the file
-                monthly_avg_df = df.resample('ME').mean().round(3).reindex(full_date_range).fillna(0)
+                monthly_avg_df = df.resample('ME').mean().round(2).reindex(full_date_range).fillna(0)
 
                 computed_monthly_averages = monthly_avg_df.to_dict(orient='index')
                 

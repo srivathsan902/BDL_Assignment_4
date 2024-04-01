@@ -11,37 +11,41 @@ def r2_score(y_true, y_pred):
     r2 = 1 - RSS/TSS
     return r2
 
-def evaluate_score(params_yaml_path):
+def evaluate_score(params_yaml_path, live):
     try:
         with open(params_yaml_path, 'r') as file:
             params = yaml.safe_load(file)
         
-        gt_file_path = params['evaluate']['INPUT_PATHS'][0]
-        computed_file_path = params['evaluate']['INPUT_PATHS'][1]
-        gt_file_name = params['evaluate']['INPUT_FILE_NAMES'][0]
-        computed_file_name = params['evaluate']['INPUT_FILE_NAMES'][1]
+        gt_file_path = params['evaluate']['INPUT_PATHS'][1]
+        computed_file_path = params['evaluate']['INPUT_PATHS'][0]
+        gt_file_name = params['evaluate']['INPUT_FILE_NAMES'][1]
+        computed_file_name = params['evaluate']['INPUT_FILE_NAMES'][0]
         output_path = params['evaluate']['OUTPUT_PATH']
         mapping = params['base']['MAPPING']
         
-        print(output_path)
         if not os.path.exists(output_path):
             os.makedirs(output_path)
 
         gt = json.load(open(os.path.join(gt_file_path,gt_file_name)))
         pred = json.load(open(os.path.join(computed_file_path,computed_file_name)))
         
+        all_scores = {}
         for file_name, data in gt.items():
             gt_file_wise = data
             pred_file_wise = pred[file_name]
+            all_scores = {}
             
             for pred_field in pred_file_wise.keys():
                 gt_field = mapping[pred_field]
                 gt_data = gt_file_wise[gt_field]
                 pred_data = pred_file_wise[pred_field]
-
                 score = r2_score(gt_data, pred_data)
-                with Live() as live:
-                    live.log_metric("R2 Score", score)
+                all_scores[gt_field] = score.round(3)
+
+            if not live.summary:
+                live.summary = {}
+            live.summary[file_name] = all_scores
+        # live.log_metric("R2 Score", score)
 
     
     except Exception as e:
@@ -54,5 +58,9 @@ if __name__ == '__main__':
     # print(y_true)
     # print(y_pred)
     # print(r2_score(y_true, y_pred))
-
-    evaluate_score('params.yaml')
+    with open('params.yaml', 'r') as file:
+            params = yaml.safe_load(file)
+    output_path = params['evaluate']['OUTPUT_PATH']
+    live = Live(os.path.join(output_path,'live'),dvcyaml = False)
+    evaluate_score('params.yaml', live)
+    live.make_summary()

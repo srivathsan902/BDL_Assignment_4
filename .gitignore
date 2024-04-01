@@ -7,6 +7,6 @@ data_2.csv
 dvc_commands.txt
 test.py
 /downloaded
+/eval
 /processed
 /prepared
-/eval

@@ -8,7 +8,7 @@ def extract_GT_Monthly_Averages(params_yaml_path):
     gt_cols = params['base']['GT_COLUMNS']
     input_path = params['prepare']['INPUT_PATH']
     output_path = params['prepare']['OUTPUT_PATH']
-    output_file_name = params['process']['OUTPUT_FILE_NAME']
+    output_file_name = params['prepare']['OUTPUT_FILE_NAME']
 
     if not os.path.exists(output_path):
         os.makedirs(output_path)

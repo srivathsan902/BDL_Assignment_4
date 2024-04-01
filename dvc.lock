@@ -26,9 +26,14 @@ stages:
   process:
     cmd: python src/process.py
     deps:
+    - path: downloaded
+      hash: md5
+      md5: fa01717e6d9927a0c917bffe2a497ba6.dir
+      size: 48261061
+      nfiles: 1
     - path: src/process.py
       hash: md5
-      md5: 35412fc591b881f80a9e048668b210d9
+      md5: baffc6b5b6fa50eda722d0691973653a
       size: 2408
     params:
       params.yaml:
@@ -36,25 +41,32 @@ stages:
         - HourlyDryBulbTemperature
         base.YEAR: 2023
         process.INPUT_PATH: downloaded
+        process.OUTPUT_FILE_NAME: processed_averages.json
         process.OUTPUT_PATH: processed
     outs:
     - path: processed
       hash: md5
-      md5: 55537e54a2ebd09aae14105f57afc522.dir
-      size: 141
+      md5: 5c7243e7ebc86bf96bf8b946e42198d0.dir
+      size: 131
       nfiles: 1
   prepare:
     cmd: python src/prepare.py
     deps:
+    - path: downloaded
+      hash: md5
+      md5: fa01717e6d9927a0c917bffe2a497ba6.dir
+      size: 48261061
+      nfiles: 1
     - path: src/prepare.py
       hash: md5
-      md5: f1c44d523c13768cc3832935f58013a1
+      md5: d0e19ea900aa76d00930f8b54d0f8980
       size: 1263
     params:
       params.yaml:
         base.GT_COLUMNS:
         - MonthlyMeanTemperature
         prepare.INPUT_PATH: downloaded
+        prepare.OUTPUT_FILE_NAME: actual_averages.json
         prepare.OUTPUT_PATH: prepared
     outs:
     - path: prepared
@@ -65,20 +77,33 @@ stages:
   evaluate:
     cmd: python src/evaluate.py
     deps:
+    - path: prepared
+      hash: md5
+      md5: e366cbed489ec89f425aaf883657bacf.dir
+      size: 117
+      nfiles: 1
+    - path: processed
+      hash: md5
+      md5: 5c7243e7ebc86bf96bf8b946e42198d0.dir
+      size: 131
+      nfiles: 1
     - path: src/evaluate.py
       hash: md5
-      md5: 0ed49057e2cb23fd1b18cd06060daede
-      size: 2028
+      md5: 928fd572e014166475326f1ab40ff02a
+      size: 2422
     params:
       params.yaml:
         base.MAPPING:
           HourlyDryBulbTemperature: MonthlyMeanTemperature
+        evaluate.INPUT_FILE_NAMES:
+        - processed_averages.json
+        - actual_averages.json
         evaluate.INPUT_PATHS:
         - processed
         - prepared
     outs:
-    - path: eval
+    - path: eval/live/metrics.json
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: cd09c665779bc4953dc18face0412652
+      size: 71
+      isexec: true
