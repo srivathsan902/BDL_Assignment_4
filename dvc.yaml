@@ -20,6 +20,7 @@ stages:
     - base.EXPECTED_COLUMNS
     - base.YEAR
     - process.INPUT_PATH
+    - process.OUTPUT_FILE_NAME
     - process.OUTPUT_PATH
     outs:
     - processed
@@ -30,6 +31,7 @@ stages:
     params:
     - base.GT_COLUMNS
     - prepare.INPUT_PATH
+    - prepare.OUTPUT_FILE_NAME
     - prepare.OUTPUT_PATH
     outs:
     - prepared
@@ -39,6 +41,7 @@ stages:
     - src/evaluate.py
     params:
     - base.MAPPING
+    - evaluate.INPUT_FILE_NAMES
     - evaluate.INPUT_PATHS
     outs:
     - eval
