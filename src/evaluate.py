@@ -40,7 +40,7 @@ def evaluate_score(params_yaml_path, live):
                 gt_data = gt_file_wise[gt_field]
                 pred_data = pred_file_wise[pred_field]
                 score = r2_score(gt_data, pred_data)
-                all_scores[gt_field] = score.round(3)
+                all_scores[gt_field] = score.round(5)
 
             if not live.summary:
                 live.summary = {}
