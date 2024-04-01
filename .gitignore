@@ -1,3 +1,9 @@
-/venv
+venv
 __pycache__
 /intermediate
+
+01381099999.csv
+99999903063.csv
+
+dvc_commands.txt
+test.py

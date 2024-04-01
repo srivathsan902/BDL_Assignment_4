@@ -1,5 +1,9 @@
-BASE_URL: "https://www.ncei.noaa.gov/data/local-climatological-data/access/"
-YEAR: 2023
-N_LOCATIONS: 2
-EXPECTED_COLUMNS: [HourlyDryBulbTemperature]
-GT_COLUMNS: [MonthlyMeanTemperature]
+base:
+  BASE_URL: "https://www.ncei.noaa.gov/data/local-climatological-data/access/"
+  YEAR: 2023
+  N_LOCATIONS: 1
+  EXPECTED_COLUMNS: [HourlyDryBulbTemperature]
+  GT_COLUMNS: [MonthlyMeanTemperature]
+
+download:
+  DOWNLOAD_PATH: "intermediate/"

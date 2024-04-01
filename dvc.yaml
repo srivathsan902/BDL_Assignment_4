@@ -11,4 +11,4 @@ stages:
     - base.YEAR
     - download.DOWNLOAD_PATH
     outs:
-    - intermediate
+    - intermediate/
