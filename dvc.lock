@@ -89,7 +89,7 @@ stages:
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
-      md5: 928fd572e014166475326f1ab40ff02a
+      md5: 67e5b3cdb1e8fa07ec77c0dc0eee0e09
       size: 2422
     params:
       params.yaml:
@@ -104,6 +104,6 @@ stages:
     outs:
     - path: eval/live/metrics.json
       hash: md5
-      md5: cd09c665779bc4953dc18face0412652
-      size: 71
+      md5: eb44b6c4a346a7ae4de18602a6dd9477
+      size: 72
       isexec: true
