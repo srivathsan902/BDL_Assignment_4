@@ -1,9 +1,12 @@
 venv
 __pycache__
-/intermediate
 
-01381099999.csv
-99999903063.csv
+data_1.csv
+data_2.csv
 
 dvc_commands.txt
 test.py
+/downloaded
+/processed
+/prepared
+/eval

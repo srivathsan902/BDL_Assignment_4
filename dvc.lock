@@ -1,0 +1,84 @@
+schema: '2.0'
+stages:
+  download:
+    cmd: python src/download.py
+    deps:
+    - path: src/download.py
+      hash: md5
+      md5: 902ef532853d52d9b51e14c6d2b083e2
+      size: 3068
+    params:
+      params.yaml:
+        base.BASE_URL: https://www.ncei.noaa.gov/data/local-climatological-data/access/
+        base.EXPECTED_COLUMNS:
+        - HourlyDryBulbTemperature
+        base.GT_COLUMNS:
+        - MonthlyMeanTemperature
+        base.N_LOCATIONS: 1
+        base.YEAR: 2023
+        download.DOWNLOAD_PATH: downloaded
+    outs:
+    - path: downloaded
+      hash: md5
+      md5: fa01717e6d9927a0c917bffe2a497ba6.dir
+      size: 48261061
+      nfiles: 1
+  process:
+    cmd: python src/process.py
+    deps:
+    - path: src/process.py
+      hash: md5
+      md5: 35412fc591b881f80a9e048668b210d9
+      size: 2408
+    params:
+      params.yaml:
+        base.EXPECTED_COLUMNS:
+        - HourlyDryBulbTemperature
+        base.YEAR: 2023
+        process.INPUT_PATH: downloaded
+        process.OUTPUT_PATH: processed
+    outs:
+    - path: processed
+      hash: md5
+      md5: 55537e54a2ebd09aae14105f57afc522.dir
+      size: 141
+      nfiles: 1
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: src/prepare.py
+      hash: md5
+      md5: f1c44d523c13768cc3832935f58013a1
+      size: 1263
+    params:
+      params.yaml:
+        base.GT_COLUMNS:
+        - MonthlyMeanTemperature
+        prepare.INPUT_PATH: downloaded
+        prepare.OUTPUT_PATH: prepared
+    outs:
+    - path: prepared
+      hash: md5
+      md5: e366cbed489ec89f425aaf883657bacf.dir
+      size: 117
+      nfiles: 1
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: src/evaluate.py
+      hash: md5
+      md5: 0ed49057e2cb23fd1b18cd06060daede
+      size: 2028
+    params:
+      params.yaml:
+        base.MAPPING:
+          HourlyDryBulbTemperature: MonthlyMeanTemperature
+        evaluate.INPUT_PATHS:
+        - processed
+        - prepared
+    outs:
+    - path: eval
+      hash: md5
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0

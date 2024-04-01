@@ -2,8 +2,26 @@ base:
   BASE_URL: "https://www.ncei.noaa.gov/data/local-climatological-data/access/"
   YEAR: 2023
   N_LOCATIONS: 1
-  EXPECTED_COLUMNS: [HourlyDryBulbTemperature]
-  GT_COLUMNS: [MonthlyMeanTemperature]
+  EXPECTED_COLUMNS: ["HourlyDryBulbTemperature"]
+  GT_COLUMNS: ["MonthlyMeanTemperature"]
+  MAPPING:
+    "HourlyDryBulbTemperature": "MonthlyMeanTemperature"
 
 download:
-  DOWNLOAD_PATH: "intermediate/"
+  DOWNLOAD_PATH: "downloaded"
+
+process:
+  INPUT_PATH: "downloaded"
+  OUTPUT_PATH: "processed"
+  OUTPUT_FILE_NAME: "actual_averages.json"
+
+prepare:
+  INPUT_PATH: "downloaded"
+  OUTPUT_PATH: "prepared"
+  OUTPUT_FILE_NAME: "processed_averages.json"
+
+evaluate:
+  INPUT_PATHS: ["processed", "prepared"]
+  INPUT_FILE_NAMES: ["actual_averages.json", "processed_averages.json"]
+  OUTPUT_PATH: "eval"
+

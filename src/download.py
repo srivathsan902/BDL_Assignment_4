@@ -2,38 +2,46 @@ from utils import *
 from utils import load_params
 
 def extract_csv_link(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        # Find all links in the webpage
-        links = soup.find_all('a', href=True)
-        # Filter out CSV links
-        csv_links = [url + link['href'] for link in links if link['href'].endswith('.csv')]
-        # If there are multiple CSV links, choose one or implement your logic
-        if csv_links:
-            return csv_links
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            # Find all links in the webpage
+            links = soup.find_all('a', href=True)
+            # Filter out CSV links
+            csv_links = [url + link['href'] for link in links if link['href'].endswith('.csv')]
+            # If there are multiple CSV links, choose one or implement your logic
+            if csv_links:
+                return csv_links
+            else:
+                print("No CSV link found on the webpage.")
+                return None
         else:
-            print("No CSV link found on the webpage.")
+            print(f"Failed to fetch webpage. Status code: {response.status_code}")
             return None
-    else:
-        print(f"Failed to fetch webpage. Status code: {response.status_code}")
+    
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
         return None
 
 def verify_csv(filename, expected_cols, gt_cols):
-    df = pd.read_csv(filename)
-    return True
-    # Check if the CSV file has expected columns
-    required_cols = expected_cols + gt_cols
-    if set(required_cols).issubset(df.columns):
-        for col in required_cols:
-            if df[col].isnull().values.all():
-                os.remove(filename)
-                print(f"CSV file '{filename}' does not have expected columns.", flush=True)
-                return False
-        return True
-    else:
+    try:
+        df = pd.read_csv(filename)
+        # Check if the CSV file has expected columns
+        required_cols = expected_cols + gt_cols
+        if set(required_cols).issubset(df.columns):
+            for col in required_cols:
+                if df[col].isnull().values.all():
+                    os.remove(filename)
+                    print(f"CSV file '{filename}' does not have expected columns.", flush=True)
+                    return False
+            return True
+        else:
+            return False
+    
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
         return False
-
 
 def download_csv(params_yaml_path):
     
@@ -48,6 +56,9 @@ def download_csv(params_yaml_path):
 
     folder = params['download']['DOWNLOAD_PATH']
 
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
     url = url + str(year) + '/'
     csv_urls = extract_csv_link(url)
     csv_urls = csv_urls[0:1]
@@ -55,15 +66,12 @@ def download_csv(params_yaml_path):
     csv_urls.append(temp)
 
     cnt = 0
-    # if os.path.exists(folder):
-    #     shutil.rmtree(folder)
 
     for csv_url in csv_urls:
         response = requests.get(csv_url)
         if response.status_code == 200:
             filename = os.path.join(folder, csv_url.split('/')[-1])  # Get filename from URL
             print(filename, flush=True)
-            os.makedirs(folder, exist_ok=True)  # Create folder if it doesn't exist
             with open(filename, 'wb') as f:
                 f.write(response.content)
             print(f"CSV file downloaded successfully as '{filename}'", flush=True)

@@ -1,5 +1,5 @@
 stages:
-  fetch_data:
+  download:
     cmd: python src/download.py
     deps:
     - src/download.py
@@ -11,4 +11,34 @@ stages:
     - base.YEAR
     - download.DOWNLOAD_PATH
     outs:
-    - intermediate/
+    - downloaded
+  process:
+    cmd: python src/process.py
+    deps:
+    - src/process.py
+    params:
+    - base.EXPECTED_COLUMNS
+    - base.YEAR
+    - process.INPUT_PATH
+    - process.OUTPUT_PATH
+    outs:
+    - processed
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - src/prepare.py
+    params:
+    - base.GT_COLUMNS
+    - prepare.INPUT_PATH
+    - prepare.OUTPUT_PATH
+    outs:
+    - prepared
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - src/evaluate.py
+    params:
+    - base.MAPPING
+    - evaluate.INPUT_PATHS
+    outs:
+    - eval
