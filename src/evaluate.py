@@ -53,7 +53,7 @@ def evaluate_score(params_yaml_path, live):
         
             if not live.summary:
                 live.summary = {}
-            live.summary[file_name] = all_scores
+            # live.summary[file_name] = all_scores
             
         live.summary["R2_Score"] = file_wise_scores
         json.dump(file_wise_scores, open(os.path.join(output_path,'scores.json'), 'w'))
