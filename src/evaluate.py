@@ -3,8 +3,6 @@ from dvclive import Live
 from utils import *
 
 def r2_score(y_true, y_pred):
-    print(y_pred)
-    print(y_true)
     mask = [(x != 'Missing') and (y != "Missing") for x, y in zip(y_true, y_pred)]
     y_true = [x for x, m in zip(y_true, mask) if m]
     y_pred = [y for y, m in zip(y_pred, mask) if m]
@@ -46,7 +44,7 @@ def evaluate_score(params_yaml_path, live):
                 gt_data = gt_file_wise[gt_field]
                 pred_data = pred_file_wise[pred_field]
                 score = r2_score(gt_data, pred_data)
-                print(gt_field, score.round(2))
+                # print(gt_field, score.round(2))
                 all_scores[gt_field] = score.round(3)
             
             file_wise_scores[file_name] = all_scores
@@ -56,7 +54,7 @@ def evaluate_score(params_yaml_path, live):
             # live.summary[file_name] = all_scores
             
         live.summary["R2_Score"] = file_wise_scores
-        json.dump(file_wise_scores, open(os.path.join(output_path,'scores.json'), 'w'))
+        # json.dump(file_wise_scores, open(os.path.join(output_path,'scores.json'), 'w'))
 
 
     
@@ -65,14 +63,12 @@ def evaluate_score(params_yaml_path, live):
         return 0
 
 if __name__ == '__main__':
-    # y_true = json.load(open('gt_monthly_averages.json'))["MonthlyMeanTemperature"]
-    # y_pred = json.load(open('computed_monthly_averages.json'))['HourlyDryBulbTemperature']
-    # print(y_true)
-    # print(y_pred)
-    # print(r2_score(y_true, y_pred))
+    
     with open('params.yaml', 'r') as file:
             params = yaml.safe_load(file)
+
     output_path = params['evaluate']['OUTPUT_PATH']
+    
     live = Live(os.path.join(output_path,'live'),dvcyaml = False)
     evaluate_score('params.yaml', live)
     live.make_summary()
