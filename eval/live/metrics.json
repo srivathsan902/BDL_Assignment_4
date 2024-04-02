@@ -1,13 +1,3 @@
 {
-    "R2_Score": {
-        "72297023129": {
-            "MonthlyMeanTemperature": 0.934
-        },
-        "72430314813": {
-            "MonthlyMeanTemperature": 0.995
-        },
-        "72570594030": {
-            "MonthlyMeanTemperature": 0.974
-        }
-    }
+    "Average_R2_Score": 0.9894000000000001
 }

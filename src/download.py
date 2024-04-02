@@ -56,6 +56,9 @@ def download_csv(params_yaml_path):
     gt_cols = params['base']['GT_COLUMNS']
 
     folder = params['download']['DOWNLOAD_PATH']
+    seed_value = params['download']['SEED']
+
+    random.seed(seed_value)
     SAMPLES_TO_CHOOSE = 100
 
     if not os.path.exists(folder):
@@ -69,6 +72,7 @@ def download_csv(params_yaml_path):
 
     cnt = 0
     required_links = random.sample(csv_urls, min(SAMPLES_TO_CHOOSE, len(csv_urls)))
+    # print(required_links, flush=True)
     for csv_url in required_links:
         response = requests.get(csv_url)
         if response.status_code == 200:
@@ -88,5 +92,5 @@ def download_csv(params_yaml_path):
     
 
 if __name__ == "__main__":
-
+    print('Started')
     download_csv(params_yaml_path = 'params.yaml')

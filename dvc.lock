@@ -1,36 +1,13 @@
 schema: '2.0'
 stages:
-  download:
-    cmd: python src/download.py
-    deps:
-    - path: src/download.py
-      hash: md5
-      md5: 0126a2b66e54051985b2bc4ab6b2b360
-      size: 3214
-    params:
-      params.yaml:
-        base.BASE_URL: https://www.ncei.noaa.gov/data/local-climatological-data/access/
-        base.EXPECTED_COLUMNS:
-        - HourlyDryBulbTemperature
-        base.GT_COLUMNS:
-        - MonthlyMeanTemperature
-        base.N_LOCATIONS: 3
-        base.YEAR: 2023
-        download.DOWNLOAD_PATH: downloaded
-    outs:
-    - path: downloaded
-      hash: md5
-      md5: 0f830aa5d0e65486229464b4a89b9c97.dir
-      size: 23894657
-      nfiles: 3
   process:
     cmd: python src/process.py
     deps:
     - path: downloaded
       hash: md5
-      md5: 0f830aa5d0e65486229464b4a89b9c97.dir
-      size: 23894657
-      nfiles: 3
+      md5: 640e89172fd42070454e43ab971b1476.dir
+      size: 123468192
+      nfiles: 5
     - path: src/process.py
       hash: md5
       md5: f7177b37799b843560edf4b2b27d690c
@@ -46,17 +23,17 @@ stages:
     outs:
     - path: processed
       hash: md5
-      md5: 457bb4f649a42e815dac8f9348b5f062.dir
-      size: 389
+      md5: aade0d7b4fca7e1b5ea52570159a827f.dir
+      size: 651
       nfiles: 1
   prepare:
     cmd: python src/prepare.py
     deps:
     - path: downloaded
       hash: md5
-      md5: 0f830aa5d0e65486229464b4a89b9c97.dir
-      size: 23894657
-      nfiles: 3
+      md5: 640e89172fd42070454e43ab971b1476.dir
+      size: 123468192
+      nfiles: 5
     - path: src/prepare.py
       hash: md5
       md5: 24675d76a67d96bb8b73534c96122393
@@ -71,26 +48,26 @@ stages:
     outs:
     - path: prepared
       hash: md5
-      md5: ece58bb67f875366549e7b4deb28364a.dir
-      size: 355
+      md5: 27b7cddaefefffc85652c7fe59dfc0f2.dir
+      size: 600
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: prepared
       hash: md5
-      md5: ece58bb67f875366549e7b4deb28364a.dir
-      size: 355
+      md5: 27b7cddaefefffc85652c7fe59dfc0f2.dir
+      size: 600
       nfiles: 1
     - path: processed
       hash: md5
-      md5: 457bb4f649a42e815dac8f9348b5f062.dir
-      size: 389
+      md5: aade0d7b4fca7e1b5ea52570159a827f.dir
+      size: 651
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
-      md5: 5213b0d21dc39a3bed7853250280ea72
-      size: 2616
+      md5: 25cb1920354cecea1d84fdc86791f4fc
+      size: 2931
     params:
       params.yaml:
         base.MAPPING:
@@ -104,6 +81,30 @@ stages:
     outs:
     - path: eval/live/metrics.json
       hash: md5
-      md5: 017b83a5cd492820902f2d3e25432597
-      size: 267
+      md5: 3381cc8b3812e183e33f55168ba1a195
+      size: 47
       isexec: true
+  download:
+    cmd: python src/download.py
+    deps:
+    - path: src/download.py
+      hash: md5
+      md5: 0252619fff035f66df5cb65e65c57f5a
+      size: 3351
+    params:
+      params.yaml:
+        base.BASE_URL: https://www.ncei.noaa.gov/data/local-climatological-data/access/
+        base.EXPECTED_COLUMNS:
+        - HourlyDryBulbTemperature
+        base.GT_COLUMNS:
+        - MonthlyMeanTemperature
+        base.N_LOCATIONS: 5
+        base.YEAR: 2023
+        download.DOWNLOAD_PATH: downloaded
+        download.SEED: 42
+    outs:
+    - path: downloaded
+      hash: md5
+      md5: 640e89172fd42070454e43ab971b1476.dir
+      size: 123468192
+      nfiles: 5

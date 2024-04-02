@@ -52,9 +52,17 @@ def evaluate_score(params_yaml_path, live):
             if not live.summary:
                 live.summary = {}
             # live.summary[file_name] = all_scores
-            
-        live.summary["R2_Score"] = file_wise_scores
-        # json.dump(file_wise_scores, open(os.path.join(output_path,'scores.json'), 'w'))
+        
+        score_list = []
+        for all_scores in file_wise_scores.values():
+            for score in all_scores.values():
+                score_list.append(score)
+                print(score)
+
+        average_R2_score = np.mean(np.array(score_list))
+        live.summary["Average_R2_Score"] = average_R2_score
+        # live.summary["R2_Score"] = file_wise_scores
+        json.dump(file_wise_scores, open(os.path.join(output_path,'scores.json'), 'w'))
 
 
     

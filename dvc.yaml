@@ -1,17 +1,4 @@
 stages:
-  download:
-    cmd: python src/download.py
-    deps:
-    - src/download.py
-    params:
-    - base.BASE_URL
-    - base.EXPECTED_COLUMNS
-    - base.GT_COLUMNS
-    - base.N_LOCATIONS
-    - base.YEAR
-    - download.DOWNLOAD_PATH
-    outs:
-    - downloaded
   process:
     cmd: python src/process.py
     deps:
@@ -50,3 +37,17 @@ stages:
     metrics:
     - eval/live/metrics.json:
         cache: false
+  download:
+    cmd: python src/download.py
+    deps:
+    - src/download.py
+    params:
+    - base.BASE_URL
+    - base.EXPECTED_COLUMNS
+    - base.GT_COLUMNS
+    - base.N_LOCATIONS
+    - base.YEAR
+    - download.DOWNLOAD_PATH
+    - download.SEED
+    outs:
+    - downloaded
