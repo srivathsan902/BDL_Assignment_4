@@ -5,6 +5,7 @@ def extract_GT_Monthly_Averages(params_yaml_path):
     with open(params_yaml_path, 'r') as file:
         params = yaml.safe_load(file)
 
+    year = params['base']['YEAR']
     gt_cols = params['base']['GT_COLUMNS']
     input_path = params['prepare']['INPUT_PATH']
     output_path = params['prepare']['OUTPUT_PATH']
@@ -13,19 +14,40 @@ def extract_GT_Monthly_Averages(params_yaml_path):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     
+    file_wise_ans = {}
     for files in os.listdir(input_path):
-        file_wise_ans = {}
         if files.endswith('.csv'):
             file_name = files.split('.')[0]
             df = pd.read_csv(os.path.join(input_path, files))
-            df = df[gt_cols
-                    ]
-            gt_monthly_averages = {}
-            for column in gt_cols:
-                df[column] = pd.to_numeric(df[column], errors='coerce')
-                gt_monthly_averages[column] = df[column][df[column].notna()].tolist()
+            cols = ['DATE'] + gt_cols
+            df = df[cols]
+            df['DATE'] = df['DATE'].apply(pd.to_datetime, errors='coerce')
+            df = df.dropna(subset=['DATE'] ,how='any')
+            df[gt_cols] = df[gt_cols].apply(pd.to_numeric, errors='coerce')
+            df = df.dropna(subset=gt_cols ,how='any')
+            
+            df.set_index('DATE', inplace=True)
+            start_year = str(year)
+            full_date_range = pd.date_range(start=f'{start_year}-01-01', end=f'{start_year}-12-31', freq='ME')
 
-            file_wise_ans[file_name] = gt_monthly_averages
+            monthly_avg_df = df.resample('ME').mean().round(2).reindex(full_date_range).fillna('Missing')
+
+            computed_monthly_averages = monthly_avg_df.to_dict(orient='index')
+            # gt_monthly_averages = {}
+            # for column in gt_cols:
+            #     monthly_avg_df[column] = pd.to_numeric(df[column], errors='coerce')
+            #     gt_monthly_averages[column] = monthly_avg_df[column][df[column].notna()].tolist()
+
+            # file_wise_ans[file_name] = gt_monthly_averages
+            ans = {}
+            for key, value in computed_monthly_averages.items():
+                for k, v in value.items():
+                    if k in ans.keys():
+                        ans[k].append(v)
+                    else:
+                        ans[k] = [v]
+
+            file_wise_ans[file_name] = ans
 
     json.dump(file_wise_ans, open(os.path.join(output_path,output_file_name), 'w'))
     

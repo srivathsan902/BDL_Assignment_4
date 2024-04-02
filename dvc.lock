@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/download.py
       hash: md5
-      md5: 902ef532853d52d9b51e14c6d2b083e2
-      size: 3068
+      md5: 0126a2b66e54051985b2bc4ab6b2b360
+      size: 3214
     params:
       params.yaml:
         base.BASE_URL: https://www.ncei.noaa.gov/data/local-climatological-data/access/
@@ -14,27 +14,27 @@ stages:
         - HourlyDryBulbTemperature
         base.GT_COLUMNS:
         - MonthlyMeanTemperature
-        base.N_LOCATIONS: 1
+        base.N_LOCATIONS: 3
         base.YEAR: 2023
         download.DOWNLOAD_PATH: downloaded
     outs:
     - path: downloaded
       hash: md5
-      md5: fa01717e6d9927a0c917bffe2a497ba6.dir
-      size: 48261061
-      nfiles: 1
+      md5: 0f830aa5d0e65486229464b4a89b9c97.dir
+      size: 23894657
+      nfiles: 3
   process:
     cmd: python src/process.py
     deps:
     - path: downloaded
       hash: md5
-      md5: fa01717e6d9927a0c917bffe2a497ba6.dir
-      size: 48261061
-      nfiles: 1
+      md5: 0f830aa5d0e65486229464b4a89b9c97.dir
+      size: 23894657
+      nfiles: 3
     - path: src/process.py
       hash: md5
-      md5: baffc6b5b6fa50eda722d0691973653a
-      size: 2408
+      md5: f7177b37799b843560edf4b2b27d690c
+      size: 2488
     params:
       params.yaml:
         base.EXPECTED_COLUMNS:
@@ -46,21 +46,21 @@ stages:
     outs:
     - path: processed
       hash: md5
-      md5: 5c7243e7ebc86bf96bf8b946e42198d0.dir
-      size: 131
+      md5: 457bb4f649a42e815dac8f9348b5f062.dir
+      size: 389
       nfiles: 1
   prepare:
     cmd: python src/prepare.py
     deps:
     - path: downloaded
       hash: md5
-      md5: fa01717e6d9927a0c917bffe2a497ba6.dir
-      size: 48261061
-      nfiles: 1
+      md5: 0f830aa5d0e65486229464b4a89b9c97.dir
+      size: 23894657
+      nfiles: 3
     - path: src/prepare.py
       hash: md5
-      md5: d0e19ea900aa76d00930f8b54d0f8980
-      size: 1263
+      md5: 24675d76a67d96bb8b73534c96122393
+      size: 2333
     params:
       params.yaml:
         base.GT_COLUMNS:
@@ -71,26 +71,26 @@ stages:
     outs:
     - path: prepared
       hash: md5
-      md5: e366cbed489ec89f425aaf883657bacf.dir
-      size: 117
+      md5: ece58bb67f875366549e7b4deb28364a.dir
+      size: 355
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: prepared
       hash: md5
-      md5: e366cbed489ec89f425aaf883657bacf.dir
-      size: 117
+      md5: ece58bb67f875366549e7b4deb28364a.dir
+      size: 355
       nfiles: 1
     - path: processed
       hash: md5
-      md5: 5c7243e7ebc86bf96bf8b946e42198d0.dir
-      size: 131
+      md5: 457bb4f649a42e815dac8f9348b5f062.dir
+      size: 389
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
-      md5: 928fd572e014166475326f1ab40ff02a
-      size: 2422
+      md5: f2516e1aee2efd645a81fa2bea4daf74
+      size: 2895
     params:
       params.yaml:
         base.MAPPING:
@@ -104,6 +104,6 @@ stages:
     outs:
     - path: eval/live/metrics.json
       hash: md5
-      md5: cd09c665779bc4953dc18face0412652
-      size: 71
+      md5: 6f94c9075f719e2f3564d93c2380c6d8
+      size: 471
       isexec: true

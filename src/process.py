@@ -15,10 +15,11 @@ def compute_monthly_averages(params_yaml_path):
         if not os.path.exists(output_path):
             os.makedirs(output_path)
 
+        file_wise_ans = {}
         for files in os.listdir(input_path):
-            file_wise_ans = {}
             if files.endswith('.csv'):
                 file_name = files.split('.')[0]
+                # print(file_name)
                 df = pd.read_csv(os.path.join(input_path, files))
 
                 cols = ['DATE'] + expected_cols
@@ -33,7 +34,7 @@ def compute_monthly_averages(params_yaml_path):
                 full_date_range = pd.date_range(start=f'{start_year}-01-01', end=f'{start_year}-12-31', freq='ME')
 
                 # Put average of 0 for the month, if the month is not encountered at all in the file
-                monthly_avg_df = df.resample('ME').mean().round(2).reindex(full_date_range).fillna(0)
+                monthly_avg_df = df.resample('ME').mean().round(2).reindex(full_date_range).fillna('Missing')
 
                 computed_monthly_averages = monthly_avg_df.to_dict(orient='index')
                 
@@ -46,6 +47,7 @@ def compute_monthly_averages(params_yaml_path):
                             ans[k] = [v]
 
                 file_wise_ans[file_name] = ans
+                # print(file_wise_ans)
 
         json.dump(file_wise_ans, open(os.path.join(output_path,output_file_name), 'w'))
 

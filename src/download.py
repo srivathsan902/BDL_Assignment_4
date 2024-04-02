@@ -1,5 +1,6 @@
 from utils import *
 from utils import load_params
+import random
 
 def extract_csv_link(url):
     try:
@@ -55,32 +56,33 @@ def download_csv(params_yaml_path):
     gt_cols = params['base']['GT_COLUMNS']
 
     folder = params['download']['DOWNLOAD_PATH']
+    SAMPLES_TO_CHOOSE = 100
 
     if not os.path.exists(folder):
         os.makedirs(folder)
 
     url = url + str(year) + '/'
     csv_urls = extract_csv_link(url)
-    csv_urls = csv_urls[0:1]
-    temp = url + '99999903063.csv'
-    csv_urls.append(temp)
+    # csv_urls = csv_urls[0:1]
+    # temp = url + '99999903063.csv'
+    # csv_urls.append(temp)
 
     cnt = 0
-
-    for csv_url in csv_urls:
+    required_links = random.sample(csv_urls, min(SAMPLES_TO_CHOOSE, len(csv_urls)))
+    for csv_url in required_links:
         response = requests.get(csv_url)
         if response.status_code == 200:
             filename = os.path.join(folder, csv_url.split('/')[-1])  # Get filename from URL
             print(filename, flush=True)
             with open(filename, 'wb') as f:
                 f.write(response.content)
-            print(f"CSV file downloaded successfully as '{filename}'", flush=True)
 
             if verify_csv(filename, expected_cols, gt_cols):
+                print(f"CSV file downloaded successfully as '{filename}'", flush=True)
                 cnt += 1
             
             if cnt == n_locs:
-                break
+                return 1
         else:
             print(f"Failed to download CSV file. Status code: {response.status_code}", flush=True)
     

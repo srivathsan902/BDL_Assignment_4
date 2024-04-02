@@ -3,6 +3,12 @@ from dvclive import Live
 from utils import *
 
 def r2_score(y_true, y_pred):
+    print(y_pred)
+    print(y_true)
+    mask = [(x != 'Missing') and (y != "Missing") for x, y in zip(y_true, y_pred)]
+    y_true = [x for x, m in zip(y_true, mask) if m]
+    y_pred = [y for y, m in zip(y_pred, mask) if m]
+
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     TSS = np.sum((y_true - np.mean(y_true))**2)
@@ -29,7 +35,7 @@ def evaluate_score(params_yaml_path, live):
         gt = json.load(open(os.path.join(gt_file_path,gt_file_name)))
         pred = json.load(open(os.path.join(computed_file_path,computed_file_name)))
         
-        all_scores = {}
+        file_wise_scores = {}
         for file_name, data in gt.items():
             gt_file_wise = data
             pred_file_wise = pred[file_name]
@@ -40,12 +46,18 @@ def evaluate_score(params_yaml_path, live):
                 gt_data = gt_file_wise[gt_field]
                 pred_data = pred_file_wise[pred_field]
                 score = r2_score(gt_data, pred_data)
+                print(gt_field, score.round(2))
                 all_scores[gt_field] = score.round(3)
-
+            
+            file_wise_scores[file_name] = all_scores
+        
             if not live.summary:
                 live.summary = {}
             live.summary[file_name] = all_scores
-        # live.log_metric("R2 Score", score)
+            
+        live.summary["R2_Score"] = file_wise_scores
+        json.dump(file_wise_scores, open(os.path.join(output_path,'scores.json'), 'w'))
+
 
     
     except Exception as e:
