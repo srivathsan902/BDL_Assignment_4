@@ -5,8 +5,8 @@ stages:
     deps:
     - path: downloaded
       hash: md5
-      md5: 732a56b104f7c7b052b3cac557237ae1.dir
-      size: 28134331
+      md5: 2eb7186863987ad0594d1a46447e3d9e.dir
+      size: 25573820
       nfiles: 3
     - path: src/process.py
       hash: md5
@@ -23,16 +23,16 @@ stages:
     outs:
     - path: processed
       hash: md5
-      md5: 56fc338c212f3b145a33a14721d300d1.dir
-      size: 390
+      md5: 3bd0f8b808d3d028c73a4f86f19906fc.dir
+      size: 393
       nfiles: 1
   prepare:
     cmd: python src/prepare.py
     deps:
     - path: downloaded
       hash: md5
-      md5: 732a56b104f7c7b052b3cac557237ae1.dir
-      size: 28134331
+      md5: 2eb7186863987ad0594d1a46447e3d9e.dir
+      size: 25573820
       nfiles: 3
     - path: src/prepare.py
       hash: md5
@@ -48,21 +48,21 @@ stages:
     outs:
     - path: prepared
       hash: md5
-      md5: d2b19eb03f1bbab4de9ebdf410ff7c58.dir
-      size: 361
+      md5: f71e53d91663c6d084ae4063747c661e.dir
+      size: 366
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: prepared
       hash: md5
-      md5: d2b19eb03f1bbab4de9ebdf410ff7c58.dir
-      size: 361
+      md5: f71e53d91663c6d084ae4063747c661e.dir
+      size: 366
       nfiles: 1
     - path: processed
       hash: md5
-      md5: 56fc338c212f3b145a33a14721d300d1.dir
-      size: 390
+      md5: 3bd0f8b808d3d028c73a4f86f19906fc.dir
+      size: 393
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
@@ -81,7 +81,7 @@ stages:
     outs:
     - path: eval/live/metrics.json
       hash: md5
-      md5: bbcc545af148cb379211764965f62f8c
+      md5: fc9b464a9e0385cb6d094c0ddb9d5e0b
       size: 47
       isexec: true
   download:
@@ -101,10 +101,10 @@ stages:
         base.N_LOCATIONS: 3
         base.YEAR: 2023
         download.DOWNLOAD_PATH: downloaded
-        download.SEED: 42
+        download.SEED: 40
     outs:
     - path: downloaded
       hash: md5
-      md5: 732a56b104f7c7b052b3cac557237ae1.dir
-      size: 28134331
+      md5: 2eb7186863987ad0594d1a46447e3d9e.dir
+      size: 25573820
       nfiles: 3
