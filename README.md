@@ -12,6 +12,23 @@ Create a venv in the Pipeline directory using the command: `python -m venv venv`
 
 The dvc stage add commands are present in `dvc_commands.txt`. Run these one by one to add stages and create the `dvc.yaml` file. This file is already present for use, so run the commands if any changes have been made.
 
+## Steps to run the pipeline
+Clone the repository to the local machine using 
+`git clone https://github.com/srivathsan902/BDL_Assignment_3`
+
+Create a virtual environment using `python3 -m venv venv`
+Give `sudo apt update` and `sudo apt install python3.10-venv` in case errors arise.
+
+Then add main as the branch name:
+`git remote add origin https://github.com/srivathsan902/BDL_Assignment_3`
+
+Then do `dvc exp run` to conduct experiments.
+
+Login to `https://studio.iterative.ai`/ to track the experiments.
+
+Once the experiment is run, use `git push -u origin main` to update it in the `https://studio.iterative.ai` page.
+
+
 ## Walkthrough of Code
 The `src` folder has the relevant python scripts for the pipeline. 
 1. `download.py` : Based on the year and number of files to download, it downloads files from the given website, checks if the files have necessary columns with non-empty entries and removes the undesired files. Saves them into `downloaded` folder
