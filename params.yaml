@@ -9,7 +9,7 @@ base:
 
 download:
   DOWNLOAD_PATH: "downloaded"
-  SEED: 40
+  SEED: 42
 
 process:
   INPUT_PATH: "downloaded"
