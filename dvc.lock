@@ -5,9 +5,9 @@ stages:
     deps:
     - path: downloaded
       hash: md5
-      md5: 640e89172fd42070454e43ab971b1476.dir
-      size: 123468192
-      nfiles: 5
+      md5: 732a56b104f7c7b052b3cac557237ae1.dir
+      size: 28134331
+      nfiles: 3
     - path: src/process.py
       hash: md5
       md5: f7177b37799b843560edf4b2b27d690c
@@ -23,17 +23,17 @@ stages:
     outs:
     - path: processed
       hash: md5
-      md5: aade0d7b4fca7e1b5ea52570159a827f.dir
-      size: 651
+      md5: 56fc338c212f3b145a33a14721d300d1.dir
+      size: 390
       nfiles: 1
   prepare:
     cmd: python src/prepare.py
     deps:
     - path: downloaded
       hash: md5
-      md5: 640e89172fd42070454e43ab971b1476.dir
-      size: 123468192
-      nfiles: 5
+      md5: 732a56b104f7c7b052b3cac557237ae1.dir
+      size: 28134331
+      nfiles: 3
     - path: src/prepare.py
       hash: md5
       md5: 24675d76a67d96bb8b73534c96122393
@@ -48,21 +48,21 @@ stages:
     outs:
     - path: prepared
       hash: md5
-      md5: 27b7cddaefefffc85652c7fe59dfc0f2.dir
-      size: 600
+      md5: d2b19eb03f1bbab4de9ebdf410ff7c58.dir
+      size: 361
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: prepared
       hash: md5
-      md5: 27b7cddaefefffc85652c7fe59dfc0f2.dir
-      size: 600
+      md5: d2b19eb03f1bbab4de9ebdf410ff7c58.dir
+      size: 361
       nfiles: 1
     - path: processed
       hash: md5
-      md5: aade0d7b4fca7e1b5ea52570159a827f.dir
-      size: 651
+      md5: 56fc338c212f3b145a33a14721d300d1.dir
+      size: 390
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
@@ -81,7 +81,7 @@ stages:
     outs:
     - path: eval/live/metrics.json
       hash: md5
-      md5: 3381cc8b3812e183e33f55168ba1a195
+      md5: bbcc545af148cb379211764965f62f8c
       size: 47
       isexec: true
   download:
@@ -98,13 +98,13 @@ stages:
         - HourlyDryBulbTemperature
         base.GT_COLUMNS:
         - MonthlyMeanTemperature
-        base.N_LOCATIONS: 5
+        base.N_LOCATIONS: 3
         base.YEAR: 2023
         download.DOWNLOAD_PATH: downloaded
         download.SEED: 42
     outs:
     - path: downloaded
       hash: md5
-      md5: 640e89172fd42070454e43ab971b1476.dir
-      size: 123468192
-      nfiles: 5
+      md5: 732a56b104f7c7b052b3cac557237ae1.dir
+      size: 28134331
+      nfiles: 3
