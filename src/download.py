@@ -3,6 +3,17 @@ from utils import load_params
 import random
 
 def extract_csv_link(url):
+    """
+
+    Arguments:
+    url : str : URL of the webpage from which CSV links are to be extracted.
+
+    Extracts CSV links from the webpage.
+
+    Returns:
+    csv_links : list : List of CSV links found on the webpage.
+
+    """
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -26,6 +37,18 @@ def extract_csv_link(url):
         return None
 
 def verify_csv(filename, expected_cols, gt_cols):
+    """
+    Arguments:
+    filename : str : Path to the CSV file.
+    expected_cols : list : List of columns expected to compute averages for in the CSV file.
+    gt_cols : list : List of ground truth columns expected in the CSV file.
+
+    Verifies if the CSV file has non null values in desired columns.
+
+    Returns:
+    bool : True if the CSV file passes the verification check, False otherwise.
+
+    """
     try:
         df = pd.read_csv(filename)
         # Check if the CSV file has expected columns
@@ -46,6 +69,18 @@ def verify_csv(filename, expected_cols, gt_cols):
 
 def download_csv(params_yaml_path):
     
+    """
+
+    Arguments:
+    params_yaml_path : str : Path to the YAML file containing parameters.
+
+    Downloads CSV files from the given URL and saves them in the specified folder.
+
+    Returns:
+    int : 1 if CSV files are downloaded successfully, 0 otherwise.
+
+    """
+
     with open(params_yaml_path, 'r') as file:
         params = yaml.safe_load(file)
     
@@ -59,20 +94,17 @@ def download_csv(params_yaml_path):
     seed_value = params['download']['SEED']
 
     random.seed(seed_value)
-    SAMPLES_TO_CHOOSE = 100
+    SAMPLES_TO_CHOOSE = 100         # Max number of samples to sample from the list of CSV links
 
     if not os.path.exists(folder):
         os.makedirs(folder)
 
     url = url + str(year) + '/'
     csv_urls = extract_csv_link(url)
-    # csv_urls = csv_urls[0:1]
-    # temp = url + '99999903063.csv'
-    # csv_urls.append(temp)
 
     cnt = 0
     required_links = random.sample(csv_urls, min(SAMPLES_TO_CHOOSE, len(csv_urls)))
-    # print(required_links, flush=True)
+    
     for csv_url in required_links:
         response = requests.get(csv_url)
         if response.status_code == 200:
@@ -92,5 +124,4 @@ def download_csv(params_yaml_path):
     
 
 if __name__ == "__main__":
-    print('Started')
     download_csv(params_yaml_path = 'params.yaml')

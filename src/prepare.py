@@ -2,6 +2,19 @@ from utils import *
 from utils import load_params
 
 def extract_GT_Monthly_Averages(params_yaml_path):
+    """
+    Arguments:
+    params_yaml_path : str : Path to the YAML file containing parameters.
+
+    Extracts the monthly averages of the ground truth values from the given CSV files.
+    Stores the extracted values in a JSON file.
+
+    Returns:
+    int : 1 if extraction is successful, 0 otherwise.
+
+    """
+
+    # Read params from params.yaml file
     with open(params_yaml_path, 'r') as file:
         params = yaml.safe_load(file)
 
@@ -14,7 +27,7 @@ def extract_GT_Monthly_Averages(params_yaml_path):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     
-    file_wise_ans = {}
+    file_wise_ans = {}      # To store monthly averages for various columns for each csv file downloaded
     for files in os.listdir(input_path):
         if files.endswith('.csv'):
             file_name = files.split('.')[0]
@@ -30,15 +43,12 @@ def extract_GT_Monthly_Averages(params_yaml_path):
             start_year = str(year)
             full_date_range = pd.date_range(start=f'{start_year}-01-01', end=f'{start_year}-12-31', freq='ME')
 
+            # Handle Missing entries
             monthly_avg_df = df.resample('ME').mean().round(2).reindex(full_date_range).fillna('Missing')
 
             computed_monthly_averages = monthly_avg_df.to_dict(orient='index')
-            # gt_monthly_averages = {}
-            # for column in gt_cols:
-            #     monthly_avg_df[column] = pd.to_numeric(df[column], errors='coerce')
-            #     gt_monthly_averages[column] = monthly_avg_df[column][df[column].notna()].tolist()
 
-            # file_wise_ans[file_name] = gt_monthly_averages
+            # Rearranging the data to store monthly averages for various columns in a single dictionary
             ans = {}
             for key, value in computed_monthly_averages.items():
                 for k, v in value.items():
